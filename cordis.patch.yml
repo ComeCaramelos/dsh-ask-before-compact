@@ -1,0 +1,25 @@
+# @comecaramelos/dsh-ask-before-compact — bundle patch.
+#
+# Host plane: registers the `askBeforeCompact` service (confirmation with
+# timeout + usage warning) and the `ask-before-compact` settings namespace
+# that the Web GUI's Plugins settings page edits through the card in
+# lib/client.js.
+#
+# The per-session compaction backend is swapped in through the
+# `ask-before-compact` agent preset (presets/), which mounts lib/engine.js
+# in place of @deepseek-ai/dsh-compaction-basic. This patch deliberately
+# does NOT disable the host `compaction-basic` row: on the web surface the
+# backend lives in the agent preset realm, and a host-plane engine on top of
+# it would double-compact. Non-web profiles that run the host-plane backend
+# copy the two-line override documented in the README into their profile
+# patch.
+- insert:
+    - id: ask-before-compact
+      name: '@comecaramelos/dsh-ask-before-compact'
+      config:
+        # Base layer for the settings namespace; the UI user layer resolves
+        # above it.
+        active: true
+        timeoutSeconds: 30
+        onTimeout: permit
+        warnAtPercent: 70

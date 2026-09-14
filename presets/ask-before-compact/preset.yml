@@ -1,0 +1,3 @@
+name: Ask before compact
+description: Standard agent that asks the user (Web question with timeout) before every context compaction, with an optional usage warning. All stock standard tools.
+order: 3
